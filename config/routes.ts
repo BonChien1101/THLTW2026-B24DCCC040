@@ -46,14 +46,20 @@ export default [
 		component: './TodoList',
 	},
 	{
-		path: '/keyy',
+		path: '/laptrinhweb03',
 		name: 'LapTrinhWeb03',
 		component: './LapTrinhWeb03/index.tsx',
 	},
 	{
-		path: '/keyy',
+		path: '/laptrinhweb04',
 		name: 'LapTrinhWeb04',
 		component: './LapTrinhWeb04/index.tsx',
+	},
+	{
+		path: "sanpham",
+		name: "Sản Phẩm",
+		component: './SanPham/index.tsx',
+
 	},
 	// DANH MUC HE THONG
 	// {
