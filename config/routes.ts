@@ -1,4 +1,6 @@
-﻿export default [
+﻿import component from "@/locales/en-US/component";
+
+export default [
 	{
 		path: '/user',
 		layout: false,
@@ -13,6 +15,7 @@
 				path: '/user',
 				redirect: '/user/login',
 			},
+
 		],
 	},
 
@@ -42,7 +45,16 @@
 		icon: 'OrderedListOutlined',
 		component: './TodoList',
 	},
-
+	{
+		path: '/keyy',
+		name: 'LapTrinhWeb03',
+		component: './LapTrinhWeb03/index.tsx',
+	},
+	{
+		path: '/keyy',
+		name: 'LapTrinhWeb04',
+		component: './LapTrinhWeb04/index.tsx',
+	},
 	// DANH MUC HE THONG
 	// {
 	// 	name: 'DanhMuc',
