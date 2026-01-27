@@ -1,18 +1,12 @@
 import { useState } from 'react';
-import { Table, Button, Modal, Form, Input, InputNumber, message, Popconfirm } from 'antd';
+import { Table, Button, Modal, Form, Input, InputNumber, Checkbox, message, Popconfirm } from 'antd';
 import { useModel } from 'umi';
 
 export default () => {
     const [open, setOpen] = useState(false);
-    const [form] = Form.useForm();
+    const [isEditing, setIsEditing] = useState(false);
+    const [bienThamChieuForm] = Form.useForm();
     const { dataSource, setDataSource } = useModel('sanpham');
-
-    const handleAddProduct = (value: any) => {
-        // Tùy chỉnh thêm logic lưu sản phẩm vào model tại đây nếu cần
-        message.success('Thêm Sản Phẩm Thành Công!');
-        setOpen(false);
-        form.resetFields();
-    };
 
     const handleCancelConfirm = (e?: React.MouseEvent<HTMLElement>) => {
         // Có thể hiển thị thông báo khi hủy
@@ -50,63 +44,124 @@ export default () => {
             key: 'action',
             width: 200,
             render: (_: any, record: any) => (
-                <Popconfirm
-                    title="Bạn có chắc muốn xóa sản phẩm này?"
-                    onConfirm={() => {
-                        const danhsachSPmoi = dataSource.filter((item: any) => item.id !== record.id);
-                        setDataSource(danhsachSPmoi);
-                        message.success('Đã xóa');
-                    }}
-                    onCancel={handleCancelConfirm}
-                    okText="Yes"
-                    cancelText="No"
-                >
-                    <a><Button type='primary' danger>Xoá</Button></a>
-                </Popconfirm>
+                <>
+                    <Button
+                        type="primary"
+                        onClick={() => {
+                            setIsEditing(true);
+                            setOpen(true);
+                            bienThamChieuForm.setFieldsValue({ ...record });
+                        }}
+                    >
+                        Sửa
+                    </Button>
+                    <span style={{ margin: '0 8px' }} />
+                    <Popconfirm
+                        title="Bạn có chắc muốn xóa sản phẩm này?"
+                        onConfirm={() => {
+                            const danhsachSPmoi = dataSource.filter((item: any) => item.id !== record.id);
+                            setDataSource(danhsachSPmoi);
+                            message.success('Đã xóa');
+                        }}
+                        onCancel={handleCancelConfirm}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Button type="primary" danger>
+                            Xoá
+                        </Button>
+                    </Popconfirm>
+                </>
             ),
+
         },
     ];
 
     return (
         <>
-            <Button type="primary" onClick={() => setOpen(true)}>
+            <Button
+                style={{ marginBottom: 12 }}
+                type="primary"
+                onClick={() => {
+                    setIsEditing(false);
+                    bienThamChieuForm.resetFields();
+                    setOpen(true);
+                }}
+            >
                 Thêm Sản Phẩm
-            </Button>
-            {/* Lưu ý: ở trên, dùng useState: const [open, setOpen] = useState(false); */}
+            </Button>      
                     <Modal
-                        title="Thêm Sản Phẩm Mới"
+                        title={isEditing ? 'Sửa Sản Phẩm' : 'Thêm Sản Phẩm Mới'}
                         visible={open}
-                        onCancel={() => setOpen(false)}
+                        onCancel={() => {
+                            setOpen(false);
+                            setIsEditing(false);
+                            bienThamChieuForm.resetFields();
+                        }}
                         footer={null}
                         destroyOnClose
                     >
-                <Form form={form} onFinish={handleAddProduct} layout="vertical">
-                    <Form.Item
-                        label="Tên Sản Phẩm"
-                        name="name"
-                        rules={[{ required: true, message: 'Vui lòng nhập tên sản phẩm!' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Giá"
-                        name="price"
-                        rules={[{ required: true, message: 'Vui lòng nhập giá sản phẩm!' }]}
-                    >
-                        <InputNumber style={{ width: '100%' }} min={0} />
-                    </Form.Item>
-                    <Form.Item
-                        label="Số Lượng"
-                        name="quantity"
-                        rules={[{ required: true, message: 'Vui lòng nhập số lượng sản phẩm!' }]}
-                    >
-                        <InputNumber style={{ width: '100%' }} min={0} />
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit">
-                            Thêm
-                        </Button>
-                    </Form.Item>
+                <Form
+                form={bienThamChieuForm}
+                name="basic"
+                onFinish={(formValues) => {
+                    const { id, ...rest } = formValues as any;
+                    if (isEditing && id != null) {
+                        //sua sp
+                        const updated = dataSource.map((item: any) =>
+                            item.id === id ? { ...item, ...rest, id } : item
+                        );
+                        setDataSource(updated);
+                        message.success('Sửa Sản Phẩm Thành Công!');
+                    } else {
+                        //thêm sản phẩm mới
+                        const newId = Date.now();
+                        setDataSource([...dataSource, { id: newId, ...formValues }]);
+                        message.success('Thêm Sản Phẩm Thành Công!');
+                    }
+                    setOpen(false);
+                    setIsEditing(false);
+                    bienThamChieuForm.resetFields();
+                }}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
+                initialValues={{ remember: true }}
+                // onFinish={onFinish}
+                // onFinishFailed={onFinishFailed}
+                autoComplete="off"
+                >
+
+                <Form.Item
+                    label="Tên Sản Phẩm"
+                    name="name"
+                    
+                    rules={[{ required: true, message: 'Hãy nhập tên sản phẩm!' }]}
+                >
+                    <Input />
+                </Form.Item>
+
+                <Form.Item
+                    label="Giá Cả"
+                    name="price"
+                    rules={[{ required: true, message: 'Hãy nhập giá cả sản phẩm!' }]}
+                >
+                    <InputNumber />
+                </Form.Item>
+                <Form.Item
+                    label="Số Lượng"
+                    name="quantity"
+                    rules={[{ required: true, message: 'Hãy nhập số lượng sản phẩm!' }]}
+                >
+                    <InputNumber />
+                </Form.Item>
+
+
+
+                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                    <Button type="primary" htmlType="submit">
+                        {isEditing ? 'Lưu' : 'Submit'}
+                    </Button>
+                </Form.Item>
                 </Form>
             </Modal>
             <Table
