@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Table, Button, Modal, Form, Input, InputNumber, message, Popconfirm, Layout, Menu } from 'antd';
-import { useModel, Link, useLocation } from 'umi';
+import { Table, Button, Modal, Form, Input, InputNumber, message, Popconfirm, } from 'antd';
+import { useModel, } from 'umi';
 //Tabs dùng cho cùng trang, menu + layout + routing Link của umiJS dùng cho 2 trang riêng antd.
 export default () => {
     const {dataSource, setDataSource} = useModel('danhsachsanpham');
     const [open,setOpen] = useState(false);
     const [isEditing,setIsEditing] = useState(false);
+    const [addForm] = Form.useForm();
     const [editForm] = Form.useForm();
     const handleCancelConfirm = (e?: React.MouseEvent<HTMLElement>) => {
         if (e) console.log(e);
@@ -98,6 +99,76 @@ export default () => {
     ];
     return (
         <>
+        <Button style={{marginBottom: 12}} type="primary" onClick={() => setOpen(true)}>
+                Thêm Sản Phẩm
+            </Button>      
+            <Modal
+                title="Thêm Sản Phẩm Mới"
+                visible={open}
+                onCancel={() => setOpen(false)}
+                footer={null}
+                destroyOnClose
+            >
+                <Form
+                form={addForm}
+                name="basic"
+                onFinish={(formValues)=>{
+                    setDataSource([...dataSource, { id: Date.now(), ...formValues }]);
+                    setOpen(false); addForm.resetFields();
+                    message.success('Thêm Sản Phẩm Thành Công!');
+                }}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
+                initialValues={{ remember: true }}
+                // onFinish={onFinish}
+                // onFinishFailed={onFinishFailed}
+                autoComplete="off"
+                >
+                <Form.Item
+                    label="Tên Sản Phẩm"
+                    name="name"
+                    
+                    rules={[{ required: true, message: 'Hãy nhập tên sản phẩm!' }]}
+                >
+                    <Input />
+                </Form.Item>
+
+                <Form.Item
+                    label="Giá Cả"
+                    name="price"
+                    rules={[{ required: true, message: 'Hãy nhập giá cả sản phẩm!' },
+                        {type:'number', message: 'Giá cả phải là số!'},
+                        { type: 'number', min: 0, message: 'Giá cả phải là số dương!' },
+                        {
+                            validator: async (_,_value) =>  Promise.resolve(),
+                        }
+                    ]}
+                >
+                    <InputNumber />
+                </Form.Item>
+                <Form.Item
+                    label="Số Lượng"
+                    name="quantity"
+                    rules={[{ required: true, message: 'Hãy nhập số lượng sản phẩm!' },
+                        {type:'number', message: 'Số lượng phải là số!'},
+                        { type: 'number', min: 0, message: 'Số lượng phải là số dương!' },
+                        {
+                            validator:  (_,_value) => {if (Number.isInteger(_value)) return Promise.resolve(); return Promise.reject(new Error('Số lượng phải là số nguyên!'));},
+                        }
+                    ]}
+                >
+                    <InputNumber />
+                </Form.Item>
+
+
+
+                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                    <Button type="primary" htmlType="submit">
+                    Thêm
+                    </Button>
+                </Form.Item>
+                </Form>
+            </Modal>
             <Modal
                 title="Chỉnh Sửa Sản Phẩm"
                 visible={isEditing}
@@ -160,7 +231,7 @@ export default () => {
 
                     <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                         <Button type="primary" htmlType="submit">
-                            Submit
+                            Sửa
                         </Button>
                     </Form.Item>
                 </Form>

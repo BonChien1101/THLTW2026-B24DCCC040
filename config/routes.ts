@@ -1,5 +1,4 @@
-﻿import component from "@/locales/en-US/component";
-// Redirect import is not needed; use `redirect` field in route config
+﻿// Redirect import is not needed; use `redirect` field in route config
 
 
 export default [
