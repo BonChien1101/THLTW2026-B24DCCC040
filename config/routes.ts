@@ -1,4 +1,6 @@
 ﻿import component from "@/locales/en-US/component";
+// Redirect import is not needed; use `redirect` field in route config
+
 
 export default [
 	{
@@ -45,22 +47,36 @@ export default [
 		icon: 'OrderedListOutlined',
 		component: './TodoList',
 	},
+
 	{
-		path: '/laptrinhweb03',
-		name: 'LapTrinhWeb03',
-		component: './LapTrinhWeb03/index.tsx',
-	},
-	{
-		path: '/laptrinhweb04',
-		name: 'LapTrinhWeb04',
-		component: './LapTrinhWeb04/index.tsx',
-	},
-	{
-		path: "sanpham",
+		path: "/sanpham",
 		name: "Sản Phẩm",
-		component: './SanPham/index.tsx',
+		component: './SanPham',
 
 	},
+	{
+		path: '/',
+		redirect: '/quan-li-san-pham',
+	},
+	{
+		path: "/",
+		component: '@/layouts/index',
+		routes: [
+			{
+				path: '/quan-li-san-pham',
+				component: './QuanLiSanPham',
+			},
+			{
+				path: '/quan-li-don-hang',
+				component: './QuanLiDonHang',
+			},
+		]
+	},
+	{
+		path: '/quan-li-san-pham',
+		name: 'Quản lý Sản phẩm, Đơn Hàng',
+	},
+
 	// DANH MUC HE THONG
 	// {
 	// 	name: 'DanhMuc',
@@ -96,9 +112,6 @@ export default [
 		],
 		layout: false,
 		hideInMenu: true,
-	},
-	{
-		path: '/',
 	},
 	{
 		path: '/403',
