@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { Table, Button, Modal, Form, Input, InputNumber, message, Popconfirm, } from 'antd';
+import { useMemo, useState } from 'react';
+import { Table, Button, Modal, Form, Input, InputNumber, message, Popconfirm, Select, Slider} from 'antd';
 import { useModel, } from 'umi';
+import data from '@/utils/data';
 //Tabs dùng cho cùng trang, menu + layout + routing Link của umiJS dùng cho 2 trang riêng antd.
 export default () => {
     const {dataSource, setDataSource} = useModel('danhsachsanpham');
@@ -8,10 +9,37 @@ export default () => {
     const [isEditing,setIsEditing] = useState(false);
     const [addForm] = Form.useForm();
     const [editForm] = Form.useForm();
+    const [searchText, setSearchText] = useState('');
     const handleCancelConfirm = (e?: React.MouseEvent<HTMLElement>) => {
         if (e) console.log(e);
         message.info('Đã hủy');
     };
+    const handleChange = (value: string) => {
+        console.log(`Đã chọn: ${value}`);
+    };
+    const [locDanhMuc, setLocDanhMuc] = useState<string | undefined>(undefined);
+    const [locGiaCa, setLocGiaCa] = useState<[number, number]>([0, 100000000]);
+    const [locTrangThai, setLocTrangThai] = useState<string | undefined>(undefined);
+    // laay dsach du lieu loc
+    const DSDanhMuc = useMemo(() => {
+        const set = new Set<string>();
+        (dataSource || []).forEach((item:any) => {
+            if (item.category) {
+                set.add(String(item.category));
+            }
+        });
+        return Array.from(set).map(item => ({ label: item, value: item }));
+    }, [dataSource]);
+
+    const DataSauLoc = useMemo(() => {
+        return (dataSource || []).filter((item: any) => {
+            const matchSearch = item.name.toLowerCase().includes(searchText.trim().toLowerCase());
+            const matchCategory = locDanhMuc ? item.category === locDanhMuc : true;
+            const matchPrice = item.price >= locGiaCa[0] && item.price <= locGiaCa[1];
+            const matchStatus = locTrangThai ? item.status === locTrangThai : true;
+            return matchCategory && matchPrice && matchStatus && matchSearch;
+        });
+    }, [dataSource,searchText, locDanhMuc, locGiaCa, locTrangThai]);
 
     const columns = [
         {
@@ -54,6 +82,7 @@ export default () => {
             width: 200,
             align: 'center',
             render: (_: any, record: any) => {
+
             const qty = Number(record.quantity) || 0; // || 0 là giá trị mặc định nếu không có số lượng
             if (qty === 0 ) return <span style={{color:'red',}}><strong>Hết Hàng</strong></span>;
             if (qty <= 10) return <span style={{color:'orange'}}><strong>Sắp Hết Hàng</strong></span>;
@@ -101,7 +130,33 @@ export default () => {
         <>
         <Button style={{marginBottom: 12}} type="primary" onClick={() => setOpen(true)}>
                 Thêm Sản Phẩm
-            </Button>      
+            </Button>
+            <Input.Search
+                placeholder="Tìm kiếm sản phẩm"
+                onSearch={value => setSearchText(value)}
+                onChange={e => setSearchText(e.target.value)} //auto render
+                style={{ width: 300, marginBottom: 12 }}
+            />
+            <Select
+                defaultValue="loctheodanhmuc"
+                allowClear
+                style={{ width: 200, marginRight: 12, marginBottom:  12 }}
+                onChange={val => setLocDanhMuc(val)}
+                options={DSDanhMuc}
+                showSearch
+                optionFilterProp='label'
+                />
+                <div style={{ width: 300, display: 'inline-block', marginBottom: 12, marginRight: 12 }}>
+                    <div style={{marginBottom: 4}}>Lọc Theo Giá Cả:{locGiaCa[0].toLocaleString('vi-VN')} đ - {locGiaCa[1].toLocaleString('vi-VN')} đ</div>
+                    <Slider
+                        range
+                        min={0}
+                        max={100000000}
+                        step={10000}
+                        value={locGiaCa}
+                        onChange={(values: [number,number]) => setLocGiaCa(values)}
+                    />
+                </div>
             <Modal
                 title="Thêm Sản Phẩm Mới"
                 visible={open}
@@ -239,7 +294,7 @@ export default () => {
         <Table
         rowKey="id"
         columns={columns as any}
-        dataSource={dataSource} 
+        dataSource={DataSauLoc}
         pagination={{ pageSize: 5 }}
         />
         </>
