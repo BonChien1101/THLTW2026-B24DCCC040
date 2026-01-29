@@ -14,9 +14,6 @@ export default () => {
         if (e) console.log(e);
         message.info('Đã hủy');
     };
-    const handleChange = (value: string) => {
-        console.log(`Đã chọn: ${value}`);
-    };
     const [locDanhMuc, setLocDanhMuc] = useState<string | undefined>(undefined);
     const [locGiaCa, setLocGiaCa] = useState<[number, number]>([0, 100000000]);
     const [locTrangThai, setLocTrangThai] = useState<string | undefined>(undefined);
@@ -36,8 +33,11 @@ export default () => {
             const matchSearch = item.name.toLowerCase().includes(searchText.trim().toLowerCase());
             const matchCategory = locDanhMuc ? item.category === locDanhMuc : true;
             const matchPrice = item.price >= locGiaCa[0] && item.price <= locGiaCa[1];
-            const matchStatus = locTrangThai ? item.status === locTrangThai : true;
-            return matchCategory && matchPrice && matchStatus && matchSearch;
+            const qty = Number(item.quantity) || 0;
+            const matchQty =
+            qty === 0 ? 'Hết Hàng' : qty <= 10 ? 'Sắp Hết Hàng' : 'Còn Hàng';
+            const matchStatus = locTrangThai ? matchQty === locTrangThai : true;
+            return matchCategory && matchPrice && matchStatus && matchSearch ;
         });
     }, [dataSource,searchText, locDanhMuc, locGiaCa, locTrangThai]);
 
@@ -146,17 +146,30 @@ export default () => {
                 showSearch
                 optionFilterProp='label'
                 />
-                <div style={{ width: 300, display: 'inline-block', marginBottom: 12, marginRight: 12 }}>
-                    <div style={{marginBottom: 4}}>Lọc Theo Giá Cả:{locGiaCa[0].toLocaleString('vi-VN')} đ - {locGiaCa[1].toLocaleString('vi-VN')} đ</div>
-                    <Slider
-                        range
-                        min={0}
-                        max={100000000}
-                        step={10000}
-                        value={locGiaCa}
-                        onChange={(values: [number,number]) => setLocGiaCa(values)}
-                    />
-                </div>
+            <div style={{ width: 300, display: 'inline-block', marginBottom: 12, marginRight: 12 }}>
+                <div style={{marginBottom: 4}}>Lọc Theo Giá Cả:{locGiaCa[0].toLocaleString('vi-VN')} đ - {locGiaCa[1].toLocaleString('vi-VN')} đ</div>
+                <Slider
+                    range
+                    min={0}
+                    max={100000000}
+                    step={10000}
+                    value={locGiaCa}
+                    onChange={(values: [number,number]) => setLocGiaCa(values)}
+                />
+            </div>
+
+            <Select 
+                allowClear
+                placeholder='Lọc theo trạng thái'
+                style={{ width: 200, marginRight: 12, marginBottom: 12 }}
+                value={locTrangThai}
+                onChange={val => setLocTrangThai(val)}
+                options={[
+                    { label: 'Còn Hàng', value: 'Còn Hàng' },
+                    { label: 'Hết Hàng', value: 'Hết Hàng' },
+                    { label: 'Sắp Hết Hàng', value: 'Sắp Hết Hàng' },
+                ]}
+            />
             <Modal
                 title="Thêm Sản Phẩm Mới"
                 visible={open}
