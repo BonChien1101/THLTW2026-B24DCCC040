@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Table, Button, Modal, Form, Input, InputNumber, message, Popconfirm, Select, Slider} from 'antd';
 import { useModel, } from 'umi';
-import data from '@/utils/data';
+
 //Tabs dùng cho cùng trang, menu + layout + routing Link của umiJS dùng cho 2 trang riêng antd.
 export default () => {
     const {dataSource, setDataSource} = useModel('danhsachsanpham');
@@ -34,12 +34,12 @@ export default () => {
             const matchCategory = locDanhMuc ? item.category === locDanhMuc : true;
             const matchPrice = item.price >= locGiaCa[0] && item.price <= locGiaCa[1];
             const qty = Number(item.quantity) || 0;
-            const matchQty =
-            qty === 0 ? 'Hết Hàng' : qty <= 10 ? 'Sắp Hết Hàng' : 'Còn Hàng';
+            const matchQty = qty === 0 ? 'Hết Hàng' : qty <= 10 ? 'Sắp Hết Hàng' : 'Còn Hàng';
             const matchStatus = locTrangThai ? matchQty === locTrangThai : true;
             return matchCategory && matchPrice && matchStatus && matchSearch ;
         });
-    }, [dataSource,searchText, locDanhMuc, locGiaCa, locTrangThai]);
+    }, [dataSource,searchText, locDanhMuc, locGiaCa, locTrangThai]
+    );
 
     const columns = [
         {

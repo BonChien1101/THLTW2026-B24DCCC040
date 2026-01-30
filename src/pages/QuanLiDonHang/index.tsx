@@ -1,4 +1,5 @@
-import { Table, Button, Modal, Form, Input, InputNumber, message, Popconfirm, Select, Descriptions } from 'antd';
+
+import { Table, Button, Modal, Form, Input, InputNumber, message, Popconfirm, Select, Descriptions, DatePicker, Space } from 'antd';
 import React, { useMemo, useState } from 'react';
 import { useModel } from 'umi';
 
@@ -10,7 +11,10 @@ export default () => {
     const [sanphamchon, setsanphamchon] = useState<number[]>([]);
     const [detailOpen, setDetailOpen] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState<any>(null);
-
+    const [searchText, setSearchText] = useState('');
+    type OrderStatus = 'Chờ xử lý' | 'Đang vận chuyển' | 'Đã hoàn thành' | 'Đã hủy';
+    const [locTrangThai, setLocTrangThai] = useState<string | undefined>(undefined);
+    const [locNgayTao, setLocNgayTao] = useState<any>(null);
     const productOptions = useMemo( // Tạo danh sách tùy chọn sản phẩm
         () => (products || []).map((p: any) => ({ label: `${p.name} (Tồn: ${p.quantity.toLocaleString('vi-VN')})`, value: p.id })),
         [products]
@@ -25,7 +29,16 @@ export default () => {
         () => selectedProducts.reduce((sum: number, p: any) => sum + p.price * (Number(quantities?.[p.id]) || 0), 0),
         [selectedProducts, quantities]
     );
-
+    const DataSauLoc = useMemo (() =>{
+        return (orders || []).filter((item:any) => {
+            const text = searchText.toLowerCase().trim();
+            const customer = String(item.customerName || '').toLowerCase();
+            const id = String(item.id || '').toLowerCase();
+            const matchStatus = locTrangThai ? item.status === locTrangThai : true;
+            const matchDate = locNgayTao ? (new Date(item.createdAt) >= new Date(locNgayTao[0]) && new Date(item.createdAt) <= new Date(locNgayTao[1])) : true;
+            return (customer.includes(text) || id.includes(text))&& matchStatus && matchDate; 
+        });
+    }, [orders, searchText, locTrangThai, locNgayTao])
     const columns = [
         { title: 'Mã Đơn Hàng', 
             dataIndex: 'id',
@@ -156,7 +169,32 @@ export default () => {
             <Button type="primary" onClick={() => setOpen(true)} style={{ marginBottom: 12 }}>
                 Thêm Đơn Hàng
             </Button>
-
+            <Input.Search
+                placeholder="Tìm kiếm đơn hàng"
+                onSearch={value => setSearchText(value)}
+                onChange={e => setSearchText(e.target.value)} //auto render
+                style={{ width: 300, marginBottom: 12 }}
+            />
+            <Select 
+                allowClear
+                placeholder='Lọc theo trạng thái'
+                style={{ width: 200, marginRight: 12, marginBottom: 12 }}
+                onChange={(val: OrderStatus | undefined) => setLocTrangThai(val)}
+                options={[
+                    { label: 'Chờ xử lý', value: 'Chờ xử lý' },
+                    { label: 'Đang vận chuyển', value: 'Đang vận chuyển' },
+                    { label: 'Đã hoàn thành', value: 'Đã hoàn thành' },
+                    { label: 'Đã hủy', value: 'Đã hủy' }
+                ]}
+            />
+            <Space direction= 'vertical' size={12}>
+                <DatePicker.RangePicker
+                    style={{ width: '100%' }}
+                    onChange={(dates) => {
+                        setLocNgayTao(dates);
+                    }}
+                />
+            </Space>
             <Modal
                 title="Tạo Đơn Hàng"
                 visible={open}
@@ -305,7 +343,7 @@ export default () => {
             <Table
                 rowKey="id"
                 columns={columns as any[]}
-                dataSource={orders}
+                dataSource={DataSauLoc}
                 pagination={{ pageSize: 10 }}
             />
 
