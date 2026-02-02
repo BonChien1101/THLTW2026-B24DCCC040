@@ -29,6 +29,8 @@ export default () => {
         () => selectedProducts.reduce((sum: number, p: any) => sum + p.price * (Number(quantities?.[p.id]) || 0), 0),
         [selectedProducts, quantities]
     );
+    // mau
+
     const DataSauLoc = useMemo (() =>{
         return (orders || []).filter((item:any) => {
             const text = searchText.toLowerCase().trim();

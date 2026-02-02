@@ -1,6 +1,5 @@
 ﻿// Redirect import is not needed; use `redirect` field in route config
 
-
 export default [
 	{
 		path: '/user',
@@ -46,11 +45,17 @@ export default [
 		icon: 'OrderedListOutlined',
 		component: './TodoList',
 	},
-
+	{
+		path: '/dashboard1',
+		name: 'Dashboard1',
+		component: './Dashboard1',
+		icon: "HomeOutlined",
+	},
 	{
 		path: "/sanpham",
 		name: "Sản Phẩm",
 		component: './SanPham',
+		hideInMenu: true,
 
 	},
 	{
@@ -61,6 +66,7 @@ export default [
 		path: "/",
 		component: '@/layouts/index',
 		routes: [
+			
 			{
 				path: '/quan-li-san-pham',
 				component: './QuanLiSanPham',
@@ -69,12 +75,16 @@ export default [
 				path: '/quan-li-don-hang',
 				component: './QuanLiDonHang',
 			},
+
+
 		]
 	},
-	{
-		path: '/quan-li-san-pham',
-		name: 'Quản lý Sản phẩm, Đơn Hàng',
+	{	
+		path: '/quan-li-san-pham-va-don-hang',
+		name: 'Quan li san pham va don hang',
+		component: './QuanLiSanPham',
 	},
+
 
 	// DANH MUC HE THONG
 	// {
