@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import { Card, Col, Row, Statistic } from 'antd';
+import { Card, Col, Row, Statistic, Badge,} from 'antd';
 import{useModel} from 'umi'
 
 export default function Dashboard1() {
@@ -10,6 +10,7 @@ export default function Dashboard1() {
   const [totalProducts, setTotalProducts] = useState(0);
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalStockValue, setTotalStockValue] = useState(0);
+  const [orderCounts, setOrderCounts] = useState({ pending: 0, shipping: 0, completed: 0, canceled: 0 });
   const totalValue = (Array.isArray(products) ? products.reduce((acc, product) => acc + (product.price * product.quantity), 0) : 0);
   const isCompleted = (order: any) => {
     const s = String(order?.status ?? order?.state ?? '').toLowerCase().trim();
@@ -27,33 +28,74 @@ export default function Dashboard1() {
     setTotalOrders(Array.isArray(orders) ? orders.length : 0);
     setTotalStockValue(totalValue);
     setDoanhThu(totalDoanhThu);
+
+    // don hang theo status
+    if (Array.isArray(orders)) {
+      const a = (str: string) => str.trim()
+      let pending = 0, shipping = 0, completed = 0, canceled = 0;
+      orders.forEach((o: any) => {
+        const raw = String(o?.status ?? o?.state ?? '');
+        const n = a(raw);
+        if (n.includes('Chờ xử lý')) pending++;
+        else if (n.includes('Đang vận chuyển')) shipping++;
+        else if (n.includes('Đã hoàn thành')) completed++;
+        else if (n.includes('Đã huỷ')) canceled++;
+      });
+      setOrderCounts({ pending, shipping, completed, canceled });
+    } else {
+      setOrderCounts({ pending: 0, shipping: 0, completed: 0, canceled: 0 });
+    }
   }, [products, orders]);
   return (
     <div className="site-card-wrapper">
     <Row gutter={16}>
       <Col span={8}>
         <Card style={{ backgroundColor: '#f0fff0' }} title="Tổng Số Sản Phẩm" bordered={false}>
-            <Statistic style={{ color: '#3f8600' }} value={totalProducts} />
+            <Statistic value={totalProducts} />
         </Card>
       </Col>
       <Col span={8}>
         <Card style={{ backgroundColor: '#f0f8ff' }} title="Tổng Số Đơn Hàng" bordered={false}>
-          <Statistic style={{ color: '#58ddc9ff' }} value={totalOrders} />
+          <Statistic value={totalOrders} />
         </Card>
       </Col>
       <Col span={8}>
         <Card style={{ backgroundColor: '#af4e4eff' }} title="Tổng Giá Trị Tồn Kho" bordered={false}>
-          <Statistic style={{ color: '#db5661ff' }} value={totalStockValue} />
+          <Statistic value={totalStockValue} />
         </Card>
       </Col>
     </Row>
     <Row gutter={16} style={{ marginTop: 16 }}>
       <Col span={8}>
-        <Card style={{ backgroundColor: '#f0fff0' }} title="Tổng Doanh Thu" bordered={false}>
-          <Statistic style={{ color: '#3f8600' }} value={doanhThu} />
+        <Card style={{ backgroundColor: '#dfe36fff' }} title="Tổng Doanh Thu" bordered={false}>
+          <Statistic value={doanhThu} />
         </Card>
       </Col>
     </Row>
-  </div>
+
+
+    <Row gutter={16} style={{ marginTop: 16 }}>
+      <Col span={6}>
+        <Badge count={orderCounts.pending} showZero>
+          <a style={{ color: 'orange' }}>Chờ xử lý</a>
+        </Badge>
+      </Col>
+      <Col span={6}>
+        <Badge count={orderCounts.shipping} showZero>
+          <a style={{ color: 'blue' }}>Đang vận chuyển</a>
+        </Badge>
+      </Col>
+      <Col span={6}>
+        <Badge count={orderCounts.completed} showZero>
+          <a style={{ color: 'green' }}>Đã hoàn thành</a>
+        </Badge>
+      </Col>
+      <Col span={6}>
+        <Badge count={orderCounts.canceled} showZero>
+          <a style={{ color: 'red' }}>Đã huỷ</a>
+        </Badge>
+      </Col>
+    </Row>
+    </div>
   );
 }
