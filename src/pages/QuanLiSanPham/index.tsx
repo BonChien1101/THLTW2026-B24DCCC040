@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Table, Button, Modal, Form, Input, InputNumber, message, Popconfirm, Select, Slider} from 'antd';
+import { Table, Button, Modal, Form, Input, InputNumber, message, Popconfirm, Select, Slider, Space} from 'antd';
 import { useModel, } from 'umi';
 
 //Tabs dùng cho cùng trang, menu + layout + routing Link của umiJS dùng cho 2 trang riêng antd.
@@ -40,7 +40,31 @@ export default () => {
         });
     }, [dataSource,searchText, locDanhMuc, locGiaCa, locTrangThai]
     );
-
+      // sap xep
+    const sortAZ = () => {
+    if (Array.isArray(dataSource)) {
+      const sorted = [...dataSource].sort((a, b) => (a.name).localeCompare((b.name)));
+      setDataSource(sorted);
+    }
+    };
+    const sortZA = () => {
+    if (Array.isArray(dataSource)) {
+      const sorted = [...dataSource].sort((a, b) => (b.name).localeCompare((a.name)));
+      setDataSource(sorted);
+    }
+    };
+    const sortPriceAsc = () => {
+    if (Array.isArray(dataSource)) {
+      const sorted = [...dataSource].sort((a, b) => (a.price - b.price));
+      setDataSource(sorted);
+    }
+    };
+    const sortPriceDesc = () => {
+    if (Array.isArray(dataSource)) {
+      const sorted = [...dataSource].sort((a, b) => (b.price - a.price));
+      setDataSource(sorted);
+    }
+  };
     const columns = [
         {
             title: 'STT',
@@ -170,6 +194,36 @@ export default () => {
                     { label: 'Sắp Hết Hàng', value: 'Sắp Hết Hàng' },
                 ]}
             />
+            <Space>
+                <Select
+                    defaultValue="Sắp xếp A-Z"
+                    onChange={val => {
+                        switch (val) {
+                            case "Sắp xếp A-Z":
+                                sortAZ();
+                                break;
+                            case "Sắp xếp Z-A":
+                                sortZA();
+                                break;
+                            case "Giá tăng dần":
+                                sortPriceAsc();
+                                break;
+                            case "Giá giảm dần":
+                                sortPriceDesc();
+                                break;
+                            default:
+                                break;
+                        }
+                    }}
+                    style={{ width: 120 }}
+                    options={[
+                        { label: 'Sắp xếp A-Z', value: 'Sắp xếp A-Z' },
+                        { label: 'Sắp xếp Z-A', value: 'Sắp xếp Z-A' },
+                        { label: 'Giá tăng dần', value: 'Giá tăng dần' },
+                        { label: 'Giá giảm dần', value: 'Giá giảm dần' },
+                    ]}
+                />
+            </Space>
             <Modal
                 title="Thêm Sản Phẩm Mới"
                 visible={open}

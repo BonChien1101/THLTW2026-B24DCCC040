@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import { Card, Col, Row, Statistic, Badge,} from 'antd';
+import { Card, Col, Row, Statistic, Badge, Avatar} from 'antd';
 import{useModel} from 'umi'
 
 export default function Dashboard1() {
@@ -77,22 +77,22 @@ export default function Dashboard1() {
     <Row gutter={16} style={{ marginTop: 16 }}>
       <Col span={6}>
         <Badge count={orderCounts.pending} showZero>
-          <a style={{ color: 'orange' }}>Chờ xử lý</a>
+          <Avatar size={60} style={{ color: 'orange' }}>Chờ xử lý</Avatar>
         </Badge>
       </Col>
       <Col span={6}>
         <Badge count={orderCounts.shipping} showZero>
-          <a style={{ color: 'blue' }}>Đang vận chuyển</a>
+          <Avatar size={60} style={{ color: 'blue' }}>Đang vận chuyển</Avatar>
         </Badge>
       </Col>
       <Col span={6}>
         <Badge count={orderCounts.completed} showZero>
-          <a style={{ color: 'green' }}>Đã hoàn thành</a>
+          <Avatar size={60} style={{ color: 'green' }}>Đã hoàn thành</Avatar>
         </Badge>
       </Col>
       <Col span={6}>
         <Badge count={orderCounts.canceled} showZero>
-          <a style={{ color: 'red' }}>Đã huỷ</a>
+          <Avatar size={60} style={{ color: 'red' }}>Đã huỷ</Avatar>
         </Badge>
       </Col>
     </Row>
