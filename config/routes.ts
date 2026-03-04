@@ -46,6 +46,12 @@ export default [
 		component: './TodoList',
 	},
 	{
+		path: '/doan-so',
+		name: 'DoanSo',
+		icon: 'CalculatorOutlined',
+		component: './DoanSo',
+	},
+	{
 		path: '/dashboard1',
 		name: 'Dashboard1',
 		component: './Dashboard1',

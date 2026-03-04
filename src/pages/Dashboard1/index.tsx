@@ -46,6 +46,8 @@ export default function Dashboard1() {
       setOrderCounts({ pending: 0, shipping: 0, completed: 0, canceled: 0 });
     }
   }, [products, orders]);
+
+
   return (
     <div className="site-card-wrapper">
     <Row gutter={16}>
