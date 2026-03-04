@@ -1,10 +1,8 @@
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import {Input, Form, Button   } from "antd"
-import { set } from "lodash";
 export default () => {
     const [secret, setSecret] = useState<number>(Math.floor(Math.random() * 100) + 1);
     const [guess, setGuess] = useState<number | undefined>(undefined);
-    const [finished, setFinished] = useState<boolean>(false);
     const [status, setStatus] = useState<string>("");
     const [count, setCount] = useState<number>(0);
     const handleSubmit = () => {
@@ -16,19 +14,14 @@ export default () => {
             setStatus("Vui lòng nhập một số từ 1 đến 100");
             return;
         }
-        if (count === 10) {
+        if (count >= 10) {
             setStatus("Bạn đã hết lượt đoán");
-            setFinished(true);
             return;
         }
         setCount((prev) => {
-            const newCount = (prev + 1);
+            const newCount = prev + 1;
             if (newCount === 10) {
                 alert("Bạn đã hết lượt đoán, số bí mật là " + secret);
-                
-                setSecret(Math.floor(Math.random() * 100) + 1);
-                setFinished(true);
-                setCount(0);
             }
             return newCount;
         });

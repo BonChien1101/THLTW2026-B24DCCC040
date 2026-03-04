@@ -52,6 +52,24 @@ export default [
 		component: './DoanSo',
 	},
 	{
+		path: "/quanlimonhoc",
+		name: "Quản Lý Môn Học",
+		icon: "AppstoreAddOutlined",
+		component: './QuanLiMonHoc',
+	},
+	{
+    	path: '/quan-ly-danh-muc-mon-hoc',
+    	component: '@/pages/QuanLyDanhMucMonHoc',
+  	},
+  	{
+    	path: '/quan-ly-tien-do-hoc-tap',
+    	component: '@/pages/QuanLyTienDoHocTap',
+  	},
+  	{
+    	path: '/thiet-lap-muc-tieu-hang-thang',
+    	component: '@/pages/ThietLapMucTieuHangThang',
+  	},
+	{
 		path: '/dashboard1',
 		name: 'Dashboard1',
 		component: './Dashboard1',
