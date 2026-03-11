@@ -46,6 +46,12 @@ export default [
 		component: './TodoList',
 	},
 	{
+		path: '/quan-li-de-thi',
+		name: 'QuanLiDeThi',
+		icon: 'FileTextOutlined',
+		component: './QuanLiDeThi',
+	},
+	{
 		path: '/oan-tu-ti',
 		name: 'OanTuTi',
 		icon: 'ScissorOutlined',
