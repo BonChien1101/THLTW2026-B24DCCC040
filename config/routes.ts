@@ -46,6 +46,12 @@ export default [
 		component: './TodoList',
 	},
 	{
+		path: '/oan-tu-ti',
+		name: 'OanTuTi',
+		icon: 'ScissorOutlined',
+		component: './OanTuTi',
+	},
+	{
 		path: '/doan-so',
 		name: 'DoanSo',
 		icon: 'CalculatorOutlined',
