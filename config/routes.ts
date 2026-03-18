@@ -46,6 +46,12 @@ export default [
 		component: './TodoList',
 	},
 	{
+		path: '/dat-lich',
+		name: 'Đặt Lịch',
+		icon: 'ScheduleOutlined',
+		component: './DatLich',
+	},
+	{
 		path: '/quan-li-de-thi',
 		name: 'QuanLiDeThi',
 		icon: 'FileTextOutlined',
