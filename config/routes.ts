@@ -1,5 +1,4 @@
 ﻿// Redirect import is not needed; use `redirect` field in route config
-
 export default [
 	{
 		path: '/user',
@@ -45,6 +44,19 @@ export default [
 		icon: 'OrderedListOutlined',
 		component: './TodoList',
 	},
+	{
+		path: '/quan-ly-so-van-bang-tot-nghiep',
+		name: 'Quản Lý Sổ Văn Bằng Tốt Nghiệp',
+		component: './QuanLySoVanBangTotNghiep',
+		icon: 'BookOutlined',
+	},
+	{
+		path:'./tra-cuu-van-bang',
+		name: 'Tra Cứu Văn Bằng',
+		icon: 'SearchOutlined',
+		component: './QuanLySoVanBangTotNghiep/TraCuuVanBang',
+	},
+
 	{
 		path: '/dat-lich',
 		name: 'Đặt Lịch',
