@@ -45,6 +45,12 @@ export default [
 		component: './TodoList',
 	},
 	{
+		path: '/quan-ly-cau-lac-bo',
+		name: 'Quản Lý Câu Lạc Bộ',
+		component: './QuanLiCauLacBo',
+		icon: 'TeamOutlined',
+	},
+	{
 		path: '/quan-ly-so-van-bang-tot-nghiep',
 		name: 'Quản Lý Sổ Văn Bằng Tốt Nghiệp',
 		component: './QuanLySoVanBangTotNghiep',
