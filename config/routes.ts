@@ -45,6 +45,12 @@ export default [
 		component: './TodoList',
 	},
 	{
+		path: '/lap-ke-hoach-du-lich',
+		name: 'Lập Kế Hoạch Du Lịch',
+		component: './LapKeHoachDuLich',
+		icon: 'CalendarOutlined',
+	},
+	{
 		path: '/quan-ly-cau-lac-bo',
 		name: 'Quản Lý Câu Lạc Bộ',
 		component: './QuanLiCauLacBo',
