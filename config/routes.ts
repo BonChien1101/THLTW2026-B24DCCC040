@@ -45,6 +45,12 @@ export default [
 		component: './TodoList',
 	},
 	{
+		path: '/quan-ly-don-hang-cua-hang',
+		name: 'Quản Lý Đơn Hàng Của Hàng',
+		component: './QuanLyDonHangCuaHang',
+		icon: 'ShoppingCartOutlined',
+	},
+	{
 		path: '/lap-ke-hoach-du-lich',
 		name: 'Lập Kế Hoạch Du Lịch',
 		component: './LapKeHoachDuLich',
