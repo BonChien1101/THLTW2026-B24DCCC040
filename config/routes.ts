@@ -1,4 +1,5 @@
-﻿// Redirect import is not needed; use `redirect` field in route config
+﻿
+// Redirect import is not needed; use `redirect` field in route config
 export default [
 	{
 		path: '/user',
@@ -43,6 +44,44 @@ export default [
 		name: 'TodoList',
 		icon: 'OrderedListOutlined',
 		component: './TodoList',
+	},
+	{
+		path: '/quan-ly-bai-viet',
+		name: 'Quản Lý Bài Viết',
+		component: './QuanLyBaiViet',
+		icon: 'FileTextOutlined',
+		routes: [
+			{
+				path: '/quan-ly-bai-viet/trang-chu',
+				component: './QuanLyBaiViet/TrangChu',
+				exact: true,
+			},
+			{
+				path: '/quan-ly-bai-viet',
+				redirect: '/quan-ly-bai-viet/trang-chu',
+				exact: true,
+			},
+			{
+				path: '/quan-ly-bai-viet/gioi-thieu',
+				component: './QuanLyBaiViet/TrangGioiThieu',
+				exact: true,
+			},
+			{
+				path: '/quan-ly-bai-viet/quan-ly',
+				component: './QuanLyBaiViet/QuanLyBaiViett',
+				exact: true,
+			},
+			{
+				path: '/quan-ly-bai-viet/the',
+				component: './QuanLyBaiViet/QuanLyThe',
+				exact: true,
+			},
+			{
+				path: '/quan-ly-bai-viet/chi-tiet/:slug',
+				component: './QuanLyBaiViet/TrangChiTiet',
+				exact: true,
+			},
+		],
 	},
 	{
 		path: '/quan-ly-don-hang-cua-hang',

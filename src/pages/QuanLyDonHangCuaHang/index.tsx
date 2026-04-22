@@ -27,7 +27,6 @@ interface DonHang {
     sanPham: SanPhamChonTrongDon[];
     tongTien: number;
 }
-
 const DANH_SACH_KHACH_HANG: KhachHang[] = [
     { id: "kh1", ten: "Nguyễn Văn An" },
     { id: "kh2", ten: "Trần Thị Bình" },
