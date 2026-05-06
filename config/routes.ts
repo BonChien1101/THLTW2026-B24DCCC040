@@ -46,6 +46,11 @@ export default [
 		component: './TodoList',
 	},
 	{
+		path: '/theo-doi-cong-viec-ca-nhan',
+		name: 'Theo Dõi Công Việc Cá Nhân',
+		component: './TheoDoiCongViecCaNhan',
+	},
+	{
 		path: '/quan-ly-bai-viet',
 		name: 'Quản Lý Bài Viết',
 		component: './QuanLyBaiViet',
